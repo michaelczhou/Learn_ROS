@@ -9,6 +9,8 @@ project(point_cloud)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   pcl_ros
+  pcl_msgs
+  pcl_conversions
   roscpp
   rospy
   sensor_msgs
@@ -130,6 +132,9 @@ link_directories(${PCL_LIBRARY_DIRS})
 
 add_executable(pcl_create src/pcl_create.cpp)
 target_link_libraries(pcl_create ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(pcl_sample src/pcl_sample.cpp)
+target_link_libraries(pcl_sample ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
