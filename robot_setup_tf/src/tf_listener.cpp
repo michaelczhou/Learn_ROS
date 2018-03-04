@@ -13,10 +13,12 @@ void transformPoint(const tf::TransformListener& listener){
   laser_point.header.stamp = ros::Time();
  
   //just an arbitrary point in space
+  // 我们创建了一个geometry_msgs::PointStamped类型的虚拟点，该点的坐标为（1.0，0.2，0.0）。该类型包含标准的header消息结构，这样，我们可以就可以在消息中加入发布数据的时间戳和参考系的id。
   laser_point.point.x = 1.0;
   laser_point.point.y = 0.2;
   laser_point.point.z = 0.0;
  
+  // 这里是代码的关键位置。我们已经在base_laser参考系下虚拟了一个数据点，那么怎样将该点的数据转换到base_base参考系下呢？使用TransformListener 对象中的transformPoint（）函数即可，该函数包含三个参数：第一个参数是需要转换到的参考系id，当然是base_link了；第二个参数是需要转换的原始数据；第三个参数用来存储转换完成的数据。该函数执行完毕后，base_point就是我们转换完成的点坐标了！
   try{
     geometry_msgs::PointStamped base_point;
     listener.transformPoint("base_link", laser_point, base_point);
@@ -25,6 +27,8 @@ void transformPoint(const tf::TransformListener& listener){
         laser_point.point.x, laser_point.point.y, laser_point.point.z,
         base_point.point.x, base_point.point.y, base_point.point.z, base_point.header.stamp.toSec());
   }
+
+  //为了保证代码的稳定性，我们也需要应对出错处理，例如当tf并没有发布需要的变换关系时，在执行transformPoint时就会出现错误。
   catch(tf::TransformException& ex){
     ROS_ERROR("Received an exception trying to transform a point from \"base_laser\" to \"base_link\": %s", ex.what());
   }
