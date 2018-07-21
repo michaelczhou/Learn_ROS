@@ -1,0 +1,16 @@
+<launch>
+#创建两个节点，并以namespace区分。两个组里都使用相同的节点，并命名为sim.同时启动两个turtlesim模拟器而不会产生命名冲突。？？？
+      <group ns="turtlesim1">
+        <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+      </group>
+
+      <group ns="turtlesim2">
+        <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+      </group>
+#启动模仿节点，并将所有话题的输入和输出分别重命名。
+      <node pkg="turtlesim" name="mimic" type="mimic">
+        <remap from="input" to="turtlesim1/turtle1"/>
+        <remap from="output" to="turtlesim2/turtle1"/>
+      </node>
+#launch文件的结束标签。
+</launch>
